@@ -16,4 +16,9 @@ public interface ICommentPost {
 	CommentPost updatecommnentPost(int idpostcomment, CommentPost comment);
 
 	Optional<CommentPost> getById(int idpostcomment);
+	
+     void likeCommentPost (int id);
+	
+	void dislikeCommentPost (int id);
+	
 }
