@@ -50,5 +50,18 @@ public class CommentPostServiceImpl implements ICommentPost {
 		}
 		return updatecommnentPost;
 	}
+	
+	
+	@Override
+	public void likeCommentPost (int id){
+		commentpostrepository.likeCommentPost(id);
+	}
+	
+	
+	@Override
+	public void dislikeCommentPost(int id){
+		commentpostrepository.dislikeCommentPost(id);
+	}
+	
 
 }

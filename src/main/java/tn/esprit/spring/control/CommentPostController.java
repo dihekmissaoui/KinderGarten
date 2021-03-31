@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import tn.esprit.spring.entity.CommentPost;
 import tn.esprit.spring.service.ICommentPost;
@@ -59,4 +61,24 @@ public class CommentPostController {
 		return commentPostService.updatecommnentPost(id, CommentPost);
 	}
 
+	@PutMapping("/like/{id}")
+	@ResponseBody
+	public void likeCommentPost (@PathVariable int id) {
+		System.out.println("je suis ici dans like");
+		commentPostService.likeCommentPost(id);
+		
+		
+	}
+	
+	@PutMapping("/dislike/{id}")
+	public void dislike(@PathVariable int id) {
+		System.out.println("je suis ici dans dislike");
+		commentPostService.dislikeCommentPost(id);
+	
+	}
+	
+
+	
+	
+	
 }

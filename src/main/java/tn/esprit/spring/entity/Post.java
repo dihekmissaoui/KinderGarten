@@ -1,8 +1,16 @@
 package tn.esprit.spring.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,7 +23,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")// pour afficher le post du comment
 public class Post {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;// clé primaire
@@ -23,11 +36,24 @@ public class Post {
 	@Temporal(TemporalType.DATE) // pour avoir le type de date
 	private Date date;
 	private String content;
+	private int likes;
+	private int dislikes;
 
 	// chaque poste a plusieur comment
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
 			CascadeType.MERGE }, mappedBy = "post", orphanRemoval = true)
-	private List<CommentPost> comments = new ArrayList<>();
+	private Set<CommentPost> comments;
+	//@JsonManagedReference
+	
+	
+	
+	//chaque post a plusieur image
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE }, mappedBy = "post", orphanRemoval = true)
+	private List<DatabaseFile> databaseFile ;
+	
+	
+	
 
 	public Post() {
 		super();
@@ -65,11 +91,11 @@ public class Post {
 		this.content = content;
 	}
 
-	public List<CommentPost> getComments() {
+	public Set<CommentPost> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<CommentPost> comments) {
+	public void setComments(Set<CommentPost> comments) {
 		this.comments = comments;
 	}
 
@@ -81,6 +107,22 @@ public class Post {
 	public void removeComment(CommentPost comment) {
 		comment.setPost(null);
 		this.comments.remove(comment);
+	}
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
 	}
 
 }

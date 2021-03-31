@@ -1,10 +1,13 @@
 package tn.esprit.spring.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import tn.esprit.spring.entity.Post;
 import tn.esprit.spring.repository.PostRepository;
@@ -49,5 +52,32 @@ public class PostServiceImpl implements IPostService {
 	public Optional<Post> getById(int id) {
 		return this.postrepository.findById(id);
 	}
+    
+	@Override
+	public void likePost(int id){
+		postrepository.likePost(id);
+	}
+	
+	@Override
+	public void dislikePost(int id){
+		postrepository.dislikePost(id);
+	}
 
+	@Override
+	public List<Post> getPostByHighLike() {
+		return this.postrepository.getPostByHighLike();
+	}
+
+	@Override
+	public List<Post> getPostByTitle(String title) {
+		return this.postrepository.getPostByTitle(title);
+	}
+
+	@Override
+	public List<Post> getPostWithMaxComments() {
+		
+		return this.postrepository.getPostWithMaxComments();
+	}
+
+	
 }
