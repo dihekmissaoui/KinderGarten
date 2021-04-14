@@ -23,7 +23,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")// pour afficher le post du comment
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // pour afficher le post du
+																							// comment
 public class Post {
 	/**
 	 * 
@@ -43,17 +44,11 @@ public class Post {
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
 			CascadeType.MERGE }, mappedBy = "post", orphanRemoval = true)
 	private Set<CommentPost> comments;
-	//@JsonManagedReference
-	
-	
-	
-	//chaque post a plusieur image
-	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE }, mappedBy = "post", orphanRemoval = true)
-	private List<DatabaseFile> databaseFile ;
-	
-	
-	
+	// @JsonManagedReference
+
+	// chaque post a plusieur image
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE }, mappedBy = "post")
+	private List<DatabaseFile> databaseFile = null;
 
 	public Post() {
 		super();
@@ -109,6 +104,21 @@ public class Post {
 		this.comments.remove(comment);
 	}
 
+	public List<DatabaseFile> getDatabaseFile() {
+		return databaseFile;
+	}
+
+	public void setDatabaseFile(List<DatabaseFile> databaseFile) {
+		if (this.databaseFile == null) {
+			this.databaseFile = databaseFile;
+		} else {
+			this.databaseFile.retainAll(databaseFile);
+			this.databaseFile.addAll(databaseFile);
+		}
+
+		this.databaseFile = databaseFile;
+	}
+
 	public int getLikes() {
 		return likes;
 	}
@@ -123,6 +133,41 @@ public class Post {
 
 	public void setDislikes(int dislikes) {
 		this.dislikes = dislikes;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + ((databaseFile == null) ? 0 : databaseFile.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + dislikes;
+		result = prime * result + id;
+		result = prime * result + likes;
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Post other = (Post) obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
+		if (id != other.id)
+			return false;
+
+		return true;
 	}
 
 }
